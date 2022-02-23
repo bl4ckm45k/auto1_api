@@ -6,10 +6,6 @@ class APIError(Exception):
     pass
 
 
-class ParameterRequired(Exception):
-    pass
-
-
 class TeaPot(Exception):
     pass
 

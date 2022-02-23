@@ -7,8 +7,9 @@ from typing import Dict, List, Optional, Union, Type
 import aiohttp
 import certifi
 import ujson as json
-import api
-from utils.payload import generate_payload
+
+from .api import make_request, Methods
+from .payload import generate_payload
 
 logger = logging.getLogger('auto1.by')
 
@@ -92,12 +93,12 @@ class BaseApi:
         :raise: :obj:`utils.exceptions`
         """
 
-        return await api.make_request(await self.get_session(), self._login, self._password,
-                                      method, data, post, timeout=self.timeout, **kwargs)
+        return await make_request(await self.get_session(), self._login, self._password,
+                                  method, data, post, timeout=self.timeout, **kwargs)
 
     async def params(self):
         """Возвращает список параметров."""
-        return await self.request(api.Methods.PARAMS)
+        return await self.request(Methods.PARAMS)
 
     async def set_default(self, org_id: int = 0, delivery_id: int = 0):
         data = await self.params()
@@ -118,7 +119,7 @@ class BaseApi:
         order_type = self._order_type
         point = self._point
         payload = generate_payload(**locals())
-        return await self.request(api.Methods.SEARCH, payload)
+        return await self.request(Methods.SEARCH, payload)
 
     async def brand_by_article(self, pattern: Union[str, int]):
         """
@@ -128,7 +129,7 @@ class BaseApi:
         org_id = self._org_id
         order_type = self._order_type
         payload = generate_payload(**locals())
-        return await self.request(api.Methods.BRANDS, payload)
+        return await self.request(Methods.BRANDS, payload)
 
     async def search_by_article(
             self, article: Union[str, int], brand: str,
@@ -144,7 +145,7 @@ class BaseApi:
         order_type = self._order_type
         point = self._point
         payload = generate_payload(**locals())
-        return await self.request(api.Methods.SEARCH_BY_ARTICLE, payload)
+        return await self.request(Methods.SEARCH_BY_ARTICLE, payload)
 
     async def add_to_cart(self, store_id: Union[str, int], number: Union[str, int],
                           quantity: Union[str, int], comment: str = None):
@@ -159,25 +160,25 @@ class BaseApi:
         order_type = self._order_type
         point = self._point
         payload = generate_payload(**locals())
-        return await self.request(api.Methods.ADD_TO_CART, payload, True)
+        return await self.request(Methods.ADD_TO_CART, payload, True)
 
     async def cart_items(self):
-        return await self.request(api.Methods.CART_ITEMS)
+        return await self.request(Methods.CART_ITEMS)
 
     async def get_routes(self):
         point = self._point
         payload = generate_payload(**locals())
-        return await self.request(api.Methods.GET_ROUTES)
+        return await self.request(Methods.GET_ROUTES)
 
     async def send_order(self, route: str):
         point = self._point
         payload = generate_payload(**locals())
-        return await self.request(api.Methods.SEND_ORDER, payload, True)
+        return await self.request(Methods.SEND_ORDER, payload, True)
 
     async def clear_cart(self):
-        return await self.request(api.Methods.CLEAR_CART, post=True)
+        return await self.request(Methods.CLEAR_CART, post=True)
 
     async def orders_history(self, start: str = None, end: str = None, search_pattern: str = None):
         org_id = self._org_id
         payload = generate_payload(**locals())
-        return await self.request(api.Methods.ORDERS_HISTORY, payload)
+        return await self.request(Methods.ORDERS_HISTORY, payload)

@@ -1,6 +1,6 @@
 import aiohttp
 import logging
-from utils.exceptions import NetworkError, APIError, TeaPot, CartException
+from .exceptions import NetworkError, APIError, TeaPot, CartException
 from http import HTTPStatus
 
 logger = logging.getLogger('api-auto1.by')
