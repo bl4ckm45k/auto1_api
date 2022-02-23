@@ -57,7 +57,7 @@ async def make_request(session, login, password, method, data=None, post: bool =
     url = f'https://auto1.by/WebApi/{method}?login={login}&password={password}'
     headers = {'Content-Type': 'application/x-www-form-urlencoded',
                'Accept': 'application/json',
-               'User-Agent': 'AZG API'}
+               'User-Agent': 'auto1_api'}
 
     try:
         if post:
